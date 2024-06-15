@@ -47,8 +47,6 @@ export function Card({ name, imgUrl }) {
     }
   }, [openModal]);
 
-  console.log(pokemonData);
-
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
       <DialogTrigger className="w-full h-full flex flex-col items-center py-[30px]">
