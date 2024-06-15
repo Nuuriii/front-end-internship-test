@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,12 +8,30 @@ import {
   DialogTrigger,
 } from "./index";
 import DefaultImg from "@/assets/defaultImg.svg";
+import axios from "axios";
 
 export function Card({ name, imgUrl }) {
+  const [openModal, setOpenModal] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
+  const getDetailPokemon = async () => {
+    try {
+      const { data: pokemonDetail } = await axios(
+        `https://pokeapi.co/api/v2/pokemon/${name}`
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (openModal) {
+      getDetailPokemon();
+    }
+  }, [openModal]);
+
   return (
-    <Dialog>
+    <Dialog open={openModal} onOpenChange={setOpenModal}>
       <DialogTrigger className="w-full h-full flex flex-col items-center py-[30px]">
         <div>
           <img
