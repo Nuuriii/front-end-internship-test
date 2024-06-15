@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Card, Button } from "../ui/index";
+import { Card, Button } from "../ui";
 import { useState, useEffect } from "react";
 
 export function ListCard() {
