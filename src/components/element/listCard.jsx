@@ -31,7 +31,6 @@ export function ListCard() {
 
   return (
     <div className="py-[30px]">
-      <h1>Pokedex</h1>
       <ul className="grid sm2:grid-cols-2 sm4:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 justify-items-center gap-9">
         {listPokemon?.map((item, index) => (
           <li
