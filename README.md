@@ -1,5 +1,7 @@
 # Test Front End Developer Internship di PT. Langgeng Inovasi Teknologi (LANGIT)
 
+Halaman Web sederhana menggunakan Tailwind CSS dan Reactjs
+
 ## Setup Pengembangan Local
 
 ```sh
@@ -37,6 +39,7 @@ import axios from "axios";
 export function ListPokemon() {
   const [listPokemon, setListPokemon] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const getPokemon = async () => {
     setLoading(true);
@@ -46,7 +49,9 @@ export function ListPokemon() {
       );
       setListPokemon(getData.results);
       setLoading(false);
+      setIsError(false);
     } catch (error) {
+      setIsError(true);
       setLoading(false);
       console.log(error);
     }
@@ -60,6 +65,8 @@ export function ListPokemon() {
     <div>
       {loading ? (
         <h1>Loading. . .</h1>
+      ) : isError ? (
+        <h1>Gagal Mengambil daftar pokemon</h1>
       ) : (
         <ul>
           {listPokemon?.map((item, index) => (
@@ -95,10 +102,12 @@ export function ListPokemon()
 ```jsx
 const [listPokemon, setListPokemon] = useState([]);
 const [loading, setLoading] = useState(false);
+const [isError, setIsError] = useState(false);
 ```
 
 - `listPokemon` : State untuk menyimpan daftar Pokemon yang berhasil diambil dari API.
-- `loading` : State untuk mengecek apakah sedang dalam proses mengambil data dari API atau tidak.
+- `loading` : State yang menunjukkan apakah aplikasi sedang dalam proses memuat data, dimulai dengan nilai awal false.
+- `isError`: State yang menunjukkan apakah terjadi kesalahan selama proses pengambilan data, dimulai dengan nilai awal false.
 
 ### 4. Fungsi untuk mendapatkan Daftar Pokemon
 
@@ -111,18 +120,26 @@ const getPokemon = async () => {
     );
     setListPokemon(getData.results);
     setLoading(false);
+    setIsError(false);
   } catch (error) {
+    setIsError(true);
     setLoading(false);
     console.log(error);
   }
 };
 ```
 
-- `getPokemon` : Fungsi asynchronous yang menggunakan axios untuk mengirim permintaan GET ke API PokeAPI dengan parameter limitnya 20.
-- Mengubah nilai dari state `loading` ke true agar bisa mendeteksi jika proses pengambilan data dari API baru berjalan.
-- Dalam blok `try`, daftar pokemon dari API diambil dan disimpan dalam state `listPokemon` dengan menggunakan kode `setListPokemon(getData.results)`.
-- Setelah daftar pokemon dari API berhasil disimpan ke state, nilai dari state `loading` diubah ke false, sehingga menandakan kalau pengambilan daftar pokemon dari api telah selesai dan berhasil disimpan.
-- Dalam blok `catch`, jika terjadi kesalahan saat melakukan pengambilan daftar pokemon, `setLoading(false)` tetap dipanggil untuk menghentikan loading, dan kesalahan dicetak ke konsol dengan `console.log(error)`.
+- `setLoading(true)`: Mengatur state loading menjadi true saat permintaan dimulai untuk menunjukkan jika pengambilan data dari api baru berjalan.
+- `try`: Blok yang mencoba mengirim permintaan GET ke URL API https://pokeapi.co/api/v2/pokemon?limit=20 menggunakan axios.
+- `await axios(...)`: Menunggu hasil dari permintaan HTTP.
+- `const { data: getData } = await axios(...)`: Destructuring untuk mengambil properti data dari respons API dan menamainya getData.
+- `setListPokemon(getData.results)`: Mengubah nilai state `listPokemon` dengan daftar Pokemon yang diterima dari API.
+- `setLoading(false)`: Mengubah nilai state `loading` menjadi false setelah data berhasil dimuat.
+- `setIsError(false)`: Mengubah nilai state `isError` menjadi false jika data berhasil dimuat tanpa kesalahan.
+- `catch (error)`: Menangkap kesalahan yang terjadi selama permintaan.
+- `setIsError(true)`: Mengubah nilai state `isError` menjadi true jika terjadi kesalahan.
+- `setLoading(false)`: Mengubah nilai state `loading` menjadi false jika terjadi kesalahan.
+- `console.log(error)`: Mencetak kesalahan ke konsol.
 
 ### 4. UseEffect Hook
 
@@ -138,24 +155,27 @@ useEffect(() => {
 ### 4. Return Komponen
 
 ```jsx
-  return (
-    <div>
-      {loading ? (
-        <h1>Loading. . .</h1>
-      ) : (
-        <ul>
-          {listPokemon?.map((item, index) => (
-            <li key={index}>{item.name}</li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
-
+return (
+  <div>
+    {loading ? (
+      <h1>Loading. . .</h1>
+    ) : isError ? (
+      <h1>Gagal Mengambil daftar pokemon</h1>
+    ) : (
+      <ul>
+        {listPokemon?.map((item, index) => (
+          <li key={index}>{item.name}</li>
+        ))}
+      </ul>
+    )}
+  </div>
+);
 ```
 
 - Dalam return, komponen merender sebuah `<div>`.
-- Ternary operator digunakan untuk merender teks `"Loading..."` jika `loading` bernilai true.
-- Jika `loading` bernilai false, sebuah `<ul>` dirender yang berisi daftar nama Pokemon.
-- `listPokemon?.map((item, index) => ( ... ))` Iterasi melalui array listPokemon dan menampilkan nama setiap Pokemon sebagai `<li>`.
+- Menggunakan ternary operator untuk menentukan apa yang harus dirender berdasarkan state `loading` dan `isError`.
+- Jika state `loading` bernilai true, teks "Loading..." ditampilkan.
+- Jika state `isError` bernilai true, teks "Gagal Mengambil daftar pokemon" ditampilkan.
+- Jika state `loading` dan `isError` bernilai false, sebuah `<ul>` dirender yang berisi daftar nama Pokemon.
+- `listPokemon?.map((item, index) => ( ... ))` Iterasi melalui array listPokemon dan menampilkan nama setiap Pokemon sebagai `<li>`
+- Menambahkan properti `key` yang unik untuk setiap item dalam state `listPokemon` agar React dapat melakukan pembaruan DOM dengan lebih efisien karena `key` memberikan identitas unik untuk setiap item dalam state `listPokemon`. Ini memungkinkan React untuk meminimalkan perubahan yang diperlukan di DOM.
