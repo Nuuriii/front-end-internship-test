@@ -1,6 +1,6 @@
 # Test Front End Developer Internship di PT. Langgeng Inovasi Teknologi (LANGIT)
 
-Halaman Web sederhana menggunakan Tailwind CSS dan Reactjs
+Halaman Web sederhana menggunakan Tailwind CSS dan Reactjs yang mengintegrasikan API dari PokeAPI
 
 ## Setup Pengembangan Local
 
