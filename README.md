@@ -18,6 +18,7 @@ npm run dev
 
 - **`assets`**: Folder yang digunakan untuk menyimpan assets seperti icon dan gambar.
 - **`components`**: Terdapat dua folder didalamnya. Folder `element` berisi Komponen yang berfungsi untuk mengatur struktur dan tata letak website, dan untuk Folder `ui` berisi komponen - komponen kecil yang bersifat reusable.
+- **`lib`**: Folder untuk tempat penyimpanan berbagai utilitas, fungsi, atau modul yang digunakan di seluruh aplikasi
 - **`app.jsx`**: Komponen utama yang digunakan untuk mengatur tata letak website.
 - **`index.css`**: File CSS untuk mendefinisikan gaya global (termasuk import Tailwind CSS).
 - **`main.jsx`**: Entry point aplikasi yang merender komponen `App` ke dalam DOM.
